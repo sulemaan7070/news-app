@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-
+// eslint-disable-next-line
 export class LoadingCard extends Component {
   render() {
     return (

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Skeleton from "react-loading-skeleton";
+
 import "react-loading-skeleton/dist/skeleton.css";
 export class NewsItem extends Component {
   render() {
