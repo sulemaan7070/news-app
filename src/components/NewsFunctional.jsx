@@ -1,36 +1,41 @@
 import React, { useState, useEffect } from "react";
 import NewsItem from "./NewsItem";
+import Spinner from "./Spinner";
 
-function NewsFunctional() {
+function NewsFunctional(props) {
   const [articles, setArticles] = useState([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(0);
-
+  const [loading, setLoading] = useState(false);
+  // eslint-disable-next-line
   useEffect(() => {
+    setLoading(true);
     fetch(
-      `https://newsapi.org/v2/top-headlines?country=in&apiKey=8992f49c3c7f4e63ac0dd07a4701674a&page=${page}$pageSize=20`
+      `https://newsapi.org/v2/top-headlines?country=in&apiKey=8992f49c3c7f4e63ac0dd07a4701674a&page=${page}&pageSize=${props.pageSize}`
     )
       .then((data) => data.json())
       .catch((err) => console.log(err))
       .then((data) => {
         setArticles(data.articles);
         setPageSize(data.totalResults);
+        setLoading(false);
         console.log("total results,", data.totalResults);
       });
   }, []);
 
   async function handleNextClick() {
-    if (page + 1 > Math.ceil(pageSize / 20)) {
-    } else {
+    if (!(page + 1 > Math.ceil(pageSize / props.pageSize))) {
+      setLoading(true);
       fetch(
         `https://newsapi.org/v2/top-headlines?country=in&apiKey=8992f49c3c7f4e63ac0dd07a4701674a&page=${
           page + 1
-        }&pageSize=20`
+        }&pageSize=${props.pageSize}`
       )
         .then((data) => data.json())
         .catch((err) => console.log(err))
         .then((data) => {
           setArticles(data.articles);
+          setLoading(false);
         });
       console.log(page);
       setPage(page + 1);
@@ -38,27 +43,32 @@ function NewsFunctional() {
   }
   async function handlePrevClick() {
     console.log("Prev");
+    setLoading(true);
     fetch(
       `https://newsapi.org/v2/top-headlines?country=in&apiKey=8992f49c3c7f4e63ac0dd07a4701674a&page=${
         page - 1
-      }&pageSize=20`
+      }&pageSize=${props.pageSize}`
     )
       .then((data) => data.json())
       .catch((err) => console.log(err))
       .then((data) => {
         setArticles(data.articles);
+        setLoading(false);
       });
     console.log(page);
     setPage(page - 1);
   }
   return (
-    <div className="contrainer my-3 mx-3">
-      <h2>News app Top Headlines</h2>
-
+    <div className="container my-3">
+      <h2 className="text-center">News app Top Headlines</h2>
+      {loading && <Spinner />}
       <div className="row">
         {articles.map((element) => {
           return (
-            <div className="col-md-4" key={element.url}>
+            <div
+              className="col-md-4 d-flex justify-content-center"
+              key={element.url}
+            >
               <NewsItem
                 title={element.title ? element.title.slice(0, 45) : ""}
                 description={
@@ -99,6 +109,7 @@ function NewsFunctional() {
         <button
           type="button"
           className="btn btn-dark btn-lg"
+          disabled={page + 1 > Math.ceil(pageSize / props.pageSize)}
           onClick={handleNextClick}
         >
           Next
