@@ -11,7 +11,7 @@ function NewsFunctional(props) {
   useEffect(() => {
     setLoading(true);
     fetch(
-      `https://newsapi.org/v2/top-headlines?country=in&apiKey=8992f49c3c7f4e63ac0dd07a4701674a&page=${page}&pageSize=${props.pageSize}`
+      `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=8992f49c3c7f4e63ac0dd07a4701674a&page=${page}&pageSize=${props.pageSize}`
     )
       .then((data) => data.json())
       .catch((err) => console.log(err))
@@ -27,9 +27,13 @@ function NewsFunctional(props) {
     if (!(page + 1 > Math.ceil(pageSize / props.pageSize))) {
       setLoading(true);
       fetch(
-        `https://newsapi.org/v2/top-headlines?country=in&apiKey=8992f49c3c7f4e63ac0dd07a4701674a&page=${
-          page + 1
-        }&pageSize=${props.pageSize}`
+        `https://newsapi.org/v2/top-headlines?country=${
+          props.country
+        }&category=${
+          props.category
+        }&apiKey=8992f49c3c7f4e63ac0dd07a4701674a&page=${page + 1}&pageSize=${
+          props.pageSize
+        }`
       )
         .then((data) => data.json())
         .catch((err) => console.log(err))
@@ -45,9 +49,11 @@ function NewsFunctional(props) {
     console.log("Prev");
     setLoading(true);
     fetch(
-      `https://newsapi.org/v2/top-headlines?country=in&apiKey=8992f49c3c7f4e63ac0dd07a4701674a&page=${
-        page - 1
-      }&pageSize=${props.pageSize}`
+      `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${
+        props.category
+      }&apiKey=8992f49c3c7f4e63ac0dd07a4701674a&page=${page - 1}&pageSize=${
+        props.pageSize
+      }`
     )
       .then((data) => data.json())
       .catch((err) => console.log(err))
@@ -59,27 +65,31 @@ function NewsFunctional(props) {
     setPage(page - 1);
   }
   return (
-    <div className="container my-3">
+    <div className="container my-5 " style={{ margin: " auto" }}>
       <h2 className="text-center">News app Top Headlines</h2>
       {loading && <Spinner />}
       <div className="row">
-        {articles.map((element) => {
-          return (
-            <div
-              className="col-md-4 d-flex justify-content-center"
-              key={element.url}
-            >
-              <NewsItem
-                title={element.title ? element.title.slice(0, 45) : ""}
-                description={
-                  element.description ? element.description.slice(0, 88) : ""
-                }
-                imageUrl={element.urlToImage}
-                newsUrlAsId={element.url}
-              />
-            </div>
-          );
-        })}
+        {!loading &&
+          articles.map((element) => {
+            return (
+              <div
+                className="col-md-4 d-flex justify-content-center"
+                key={element.url}
+              >
+                <NewsItem
+                  title={element.title ? element.title.slice(0, 45) : ""}
+                  description={
+                    element.description ? element.description.slice(0, 88) : ""
+                  }
+                  imageUrl={element.urlToImage}
+                  newsUrlAsId={element.url}
+                  date={element.publishedAt}
+                  author={element.author}
+                  source={element.source.name}
+                />
+              </div>
+            );
+          })}
       </div>
       <div className="container d-flex justify-content-between">
         <button
