@@ -5,19 +5,20 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
+  const numberOfArticles = 12;
   return (
     <Router>
       <div>
         {" "}
         <NavBar />
-        {/* <NewsFunctional pageSize={5} country="in" category="entertainment" /> */}
+        {/* <NewsFunctional pageSize={numberOfArticles} country="in" category="entertainment" /> */}
         <Routes>
           <Route
             path="/"
             element={
               <NewsFunctional
                 key="general"
-                pageSize={5}
+                pageSize={numberOfArticles}
                 country="in"
                 category="general"
               />
@@ -28,7 +29,7 @@ function App() {
             element={
               <NewsFunctional
                 key="business"
-                pageSize={5}
+                pageSize={numberOfArticles}
                 country="in"
                 category="business"
               />
@@ -39,7 +40,7 @@ function App() {
             element={
               <NewsFunctional
                 key="entertainment"
-                pageSize={5}
+                pageSize={numberOfArticles}
                 country="in"
                 category="entertainment"
               />
@@ -50,7 +51,7 @@ function App() {
             element={
               <NewsFunctional
                 key="general"
-                pageSize={5}
+                pageSize={numberOfArticles}
                 country="in"
                 category="general"
               />
@@ -61,7 +62,7 @@ function App() {
             element={
               <NewsFunctional
                 key="health"
-                pageSize={5}
+                pageSize={numberOfArticles}
                 country="in"
                 category="health"
               />
@@ -72,7 +73,7 @@ function App() {
             element={
               <NewsFunctional
                 key="science"
-                pageSize={5}
+                pageSize={numberOfArticles}
                 country="in"
                 category="science"
               />
@@ -83,7 +84,7 @@ function App() {
             element={
               <NewsFunctional
                 key="sports"
-                pageSize={5}
+                pageSize={numberOfArticles}
                 country="in"
                 category="sports"
               />
@@ -94,7 +95,7 @@ function App() {
             element={
               <NewsFunctional
                 key="technology"
-                pageSize={5}
+                pageSize={numberOfArticles}
                 country="in"
                 category="technology"
               />

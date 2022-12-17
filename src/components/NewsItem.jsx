@@ -5,6 +5,7 @@ export class NewsItem extends Component {
   render() {
     let { title, description, imageUrl, newsUrlAsId, author, date, source } =
       this.props;
+
     return (
       <div className="my-2 ">
         <div className="card">
