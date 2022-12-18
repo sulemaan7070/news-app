@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from "react";
 import NewsItem from "./NewsItem";
 import Spinner from "./Spinner";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 function NewsFunctional(props) {
   const [articles, setArticles] = useState([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(0);
   const [loading, setLoading] = useState(false);
-  // eslint-disable-next-line
+  const [totalResults, setTotalResults] = useState(0);
+
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
   useEffect(() => {
     updateNews();
+    document.title = `${capitalizeFirstLetter(props.category)} - The News App`;
     // eslint-disable-next-line
   }, [page]);
+
+  const fetchMoreData = async () => {
+    const url = `https://newsapi.org/v2/top-headlines?country=${
+      props.country
+    }&category=${props.category}&apiKey=${props.apiKey}&page=${
+      page + 1
+    }&pageSize=${props.pageSize}`;
+    setPage(page + 1);
+    let data = await fetch(url);
+    let parsedData = await data.json();
+    setArticles(articles.concat(parsedData.articles));
+    setTotalResults(parsedData.totalResults);
+  };
   async function updateNews() {
     setLoading(true);
     fetch(
@@ -35,11 +54,21 @@ function NewsFunctional(props) {
   }
   return (
     <div className="container my-5 " style={{ margin: " auto" }}>
-      <h2 className="text-center">News app Top Headlines</h2>
-      {loading && <Spinner />}
-      <div className="row">
-        {!loading &&
-          articles.map((element) => {
+      <h1
+        className="text-center"
+        style={{ margin: "35px 0px", marginTop: "90px" }}
+      >
+        NewsMonkey - Top {capitalizeFirstLetter(props.category)} Headlines
+      </h1>
+      {/* {loading && <Spinner />} */}
+      <InfiniteScroll
+        dataLength={articles.length}
+        next={fetchMoreData}
+        hasMore={articles.length !== totalResults}
+        loader={<Spinner />}
+      >
+        <div className="row">
+          {articles.map((element) => {
             return (
               <div
                 className="col-md-4 d-flex justify-content-center"
@@ -59,56 +88,8 @@ function NewsFunctional(props) {
               </div>
             );
           })}
-      </div>
-      <div className="container d-flex justify-content-between">
-        <button
-          type="button"
-          className="btn btn-dark btn-lg"
-          disabled={page <= 1}
-          onClick={handlePrevClick}
-        >
-          <svg
-            stroke="currentColor"
-            fill="currentColor"
-            strokeWidth="0"
-            viewBox="0 0 24 24"
-            height="1em"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill="none"
-              strokeWidth="2"
-              d="M6,12.4 L18,12.4 M12.6,7 L18,12.4 L12.6,17.8"
-              transform="matrix(-1 0 0 1 24 0)"
-            ></path>
-          </svg>
-          Prev
-        </button>
-        <button
-          type="button"
-          className="btn btn-dark btn-lg"
-          disabled={page + 1 > Math.ceil(pageSize / props.pageSize)}
-          onClick={handleNextClick}
-        >
-          Next
-          <svg
-            stroke="currentColor"
-            fill="currentColor"
-            strokeWidth="0"
-            viewBox="0 0 24 24"
-            height="1em"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill="none"
-              strokeWidth="2"
-              d="M6,12.4 L18,12.4 M12.6,7 L18,12.4 L12.6,17.8"
-            ></path>
-          </svg>
-        </button>
-      </div>
+        </div>
+      </InfiniteScroll>
     </div>
   );
 }
