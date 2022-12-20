@@ -1,23 +1,28 @@
 import "./App.css";
 import NavBar from "./components/NavBar";
 import NewsFunctional from "./components/NewsFunctional";
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
+import LoadingBar from "react-top-loading-bar";
 function App() {
-  const numberOfArticles = 12;
+  const api = "8992f49c3c7f4e63ac0dd07a4701674a";
+  const numberOfArticles = 6;
+  const [progress, setProgress] = useState(0);
   return (
     <Router>
       <div>
         {" "}
         <NavBar />
-        {/* <NewsFunctional pageSize={numberOfArticles} country="in" category="entertainment" /> */}
+        <LoadingBar height={3} color="#f11946" progress={progress} />
+        {/* <NewsFunctional  setProgress={setProgress}  pageSize={numberOfArticles} country="in" category="entertainment" /> */}
         <Routes>
           <Route
             path="/"
             element={
               <NewsFunctional
                 key="general"
+                apiKey={api}
+                setProgress={setProgress}
                 pageSize={numberOfArticles}
                 country="in"
                 category="general"
@@ -29,6 +34,8 @@ function App() {
             element={
               <NewsFunctional
                 key="business"
+                apiKey={api}
+                setProgress={setProgress}
                 pageSize={numberOfArticles}
                 country="in"
                 category="business"
@@ -40,6 +47,8 @@ function App() {
             element={
               <NewsFunctional
                 key="entertainment"
+                apiKey={api}
+                setProgress={setProgress}
                 pageSize={numberOfArticles}
                 country="in"
                 category="entertainment"
@@ -51,6 +60,8 @@ function App() {
             element={
               <NewsFunctional
                 key="general"
+                apiKey={api}
+                setProgress={setProgress}
                 pageSize={numberOfArticles}
                 country="in"
                 category="general"
@@ -62,6 +73,8 @@ function App() {
             element={
               <NewsFunctional
                 key="health"
+                apiKey={api}
+                setProgress={setProgress}
                 pageSize={numberOfArticles}
                 country="in"
                 category="health"
@@ -73,6 +86,8 @@ function App() {
             element={
               <NewsFunctional
                 key="science"
+                apiKey={api}
+                setProgress={setProgress}
                 pageSize={numberOfArticles}
                 country="in"
                 category="science"
@@ -84,6 +99,8 @@ function App() {
             element={
               <NewsFunctional
                 key="sports"
+                apiKey={api}
+                setProgress={setProgress}
                 pageSize={numberOfArticles}
                 country="in"
                 category="sports"
@@ -95,6 +112,8 @@ function App() {
             element={
               <NewsFunctional
                 key="technology"
+                apiKey={api}
+                setProgress={setProgress}
                 pageSize={numberOfArticles}
                 country="in"
                 category="technology"
